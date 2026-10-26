@@ -1,0 +1,12 @@
+name: Generate Index
+
+on:
+  workflow_call:
+
+jobs:
+  generate-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Index
+        # run: node scripts/generate-index
+        run: echo "Generate Index ran"

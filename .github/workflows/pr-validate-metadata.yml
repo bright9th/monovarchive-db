@@ -1,0 +1,16 @@
+name: PR Validate Metadata
+
+on:
+  workflow_call:
+
+jobs:
+  pr-validate-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Metadata
+        # run: node scripts/pr-validate-Metadata
+        run: echo "Validate Metadata ran"
+
+  pr-execute-assets1-manager:
+    needs: pr-validate-metadata
+    uses: ./.github/workflows/manage-assets1.yml

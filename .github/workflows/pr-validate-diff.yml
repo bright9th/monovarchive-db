@@ -1,0 +1,16 @@
+name: PR Validate Diff
+
+on:
+  workflow_call:
+    inputs:
+      pr_type:
+        required: true
+        type: string
+
+jobs:
+  pr-validate-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Pull-Request Diff
+        # run: node scripts/pr-validate-diff
+        run: echo "Validate Pull-Request Diff ran"
