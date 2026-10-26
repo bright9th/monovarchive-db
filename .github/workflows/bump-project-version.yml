@@ -1,0 +1,42 @@
+name: Bump Project Version
+
+on:
+  workflow_call:
+    inputs:
+      pr_type:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  bump-project-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Install Dependency
+        run: pnpm install
+
+      - name: Bump Workflow Version
+        id: bump
+        run: node ./scripts/bump-project-version
+        env:
+          PR_TYPE: ${{ inputs.pr_type }}
+
+      - name: Commit & Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add ./project.manifest.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: bump project ${{ inputs.pr_type }} version to ${{ steps.bump.outputs.version }}"
+          git push origin HEAD:${{ github.ref_name }}
