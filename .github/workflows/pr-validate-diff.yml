@@ -12,5 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install Dependency
+        run: pnpm install
+
       - name: Validate Pull-Request Diff
         run: node ./scripts/pr-validate-diff

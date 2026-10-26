@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install Dependency
+        run: pnpm install
+
       - name: Manage Assets
         run: node ./scripts/manage-assets0
 

@@ -12,6 +12,9 @@ jobs:
       pr_type: ${{ steps.val-body.outputs.pr_type }}
     steps:
       - uses: actions/checkout@v4
+      - name: Install Dependency
+        run: pnpm install
+
       - name: Validate Pull-Request Body
         id: val-body
         run: node ./scripts/pr-validate-body
