@@ -11,6 +11,6 @@ jobs:
   pr-validate-diff:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Validate Pull-Request Diff
-        # run: node scripts/pr-validate-diff
-        run: echo "Validate Pull-Request Diff ran"
+        run: node ./scripts/pr-validate-diff

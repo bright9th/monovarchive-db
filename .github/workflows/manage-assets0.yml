@@ -7,9 +7,9 @@ jobs:
   manage-assets0:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Manage Assets
-        # run: node scripts/manage-assets0
-        run: echo "Manage Assets ran"
+        run: node ./scripts/manage-assets0
 
   pr-execute-index-generator:
     needs: manage-assets0
