@@ -3,21 +3,18 @@ name: PR Validate Body
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [workflow]
+    branches: [workflow, asset, doc]
 
 jobs:
   pr-validate-body:
     runs-on: ubuntu-latest
     outputs:
-      pr_type: ${{ steps.test.outputs.pr_type }}
+      pr_type: ${{ steps.val-body.outputs.pr_type }}
     steps:
       - uses: actions/checkout@v4
       - name: Validate Pull-Request Body
+        id: val-body
         run: node ./scripts/pr-validate-body
-
-      - name: Test Pull-Request Type
-        id: test
-        run: echo "pr_type=add-media" >> "$GITHUB_OUTPUT"
 
   pr-execute-diff-validator:
     needs: pr-validate-body
