@@ -28,6 +28,8 @@ jobs:
       - name: Validate Pull-Request Body
         id: val-body
         run: node ./scripts/pr-validate-body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
 
   pr-execute-diff-validator:
     needs: pr-validate-body

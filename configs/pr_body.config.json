@@ -1,0 +1,35 @@
+{
+  "validation": {
+    "steps": [
+      {
+        "id": 1,
+        "preId": 0,
+        "step": "Required Sections",
+        "regex": "(?m)^\\[TYPE\\].*[\\s\\S]*?^\\[DESCRIPTION\\].*[\\s\\S]*?^\\[IREF\\]",
+        "error": "Missing or incorrectly ordered required sections: [TYPE], [DESCRIPTION], [IREF]."
+      },
+      {
+        "id": 2,
+        "preId": 1,
+        "step": "Valid Type",
+        "regex": "(?ms)^\\[TYPE\\][^\\S\\r\\n]*\\R?[^\\S\\r\\n]*(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b[^\\r\\n]*(?:(?!^\\[[A-Z]+\\]).)*",
+        "error": "The [TYPE] section must contain one of the valid types: mod-workflow, add-media, mod-metadata, or mod-doc."
+      },
+      {
+        "id": 3,
+        "preId": 1,
+        "step": "Non-Empty Description",
+        "regex": "(?ms)^\\[DESCRIPTION\\][^\\S\\r\\n]*\\R?[^\\S\\r\\n]*\\S(?:(?!^\\[[A-Z]+\\]).)*",
+        "error": "The [DESCRIPTION] section must not be empty."
+      },
+      {
+        "id": 4,
+        "preId": 1,
+        "step": "Valid Issue Reference",
+        "regex": "(?ms)^\\[IREF\\][^\\S\\r\\n]*\\R?(?:(?!^\\[[A-Z]+\\]).)*?(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\s+#\\d+(?:(?!^\\[[A-Z]+\\]).)*",
+        "error": "The [IREF] section must contain a valid issue reference, such as 'fix #123', 'closes #123', or 'resolved #123', before the next section header."
+      }
+    ]
+  },
+  "getTypeRegex": "(?<=^\\[TYPE\\][^\\S\\r\\n]*\\R?[^\\S\\r\\n]*)(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b"
+}
