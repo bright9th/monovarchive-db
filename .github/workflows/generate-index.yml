@@ -1,0 +1,12 @@
+name: Generate Index
+
+on:
+  workflow_call:
+
+jobs:
+  generate-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Index
+        run: node ./scripts/generate-index

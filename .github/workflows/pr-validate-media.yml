@@ -1,0 +1,16 @@
+name: PR Validate Media
+
+on:
+  workflow_call:
+
+jobs:
+  pr-validate-media:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Media
+        run: node ./scripts/pr-validate-media
+
+  pr-execute-assets0-manager:
+    needs: pr-validate-media
+    uses: ./.github/workflows/manage-assets0.yml

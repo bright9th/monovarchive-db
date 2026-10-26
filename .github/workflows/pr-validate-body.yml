@@ -1,0 +1,36 @@
+name: PR Validate Body
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [workflow]
+
+jobs:
+  pr-validate-body:
+    runs-on: ubuntu-latest
+    outputs:
+      pr_type: ${{ steps.test.outputs.pr_type }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Pull-Request Body
+        run: node ./scripts/pr-validate-body
+
+      - name: Test Pull-Request Type
+        id: test
+        run: echo "pr_type=add-media" >> "$GITHUB_OUTPUT"
+
+  pr-execute-diff-validator:
+    needs: pr-validate-body
+    uses: ./.github/workflows/pr-validate-diff.yml
+    with:
+      pr_type: ${{ needs.pr-validate-body.outputs.pr_type }}
+
+  pr-execute-media-validator:
+    needs: [pr-validate-body, pr-execute-diff-validator]
+    if: needs.pr-validate-body.outputs.pr_type == 'add-media'
+    uses: ./.github/workflows/pr-validate-media.yml
+
+  pr-execute-metadata-validator:
+    needs: [pr-validate-body, pr-execute-diff-validator]
+    if: needs.pr-validate-body.outputs.pr_type == 'mod-metadata'
+    uses: ./.github/workflows/pr-validate-metadata.yml

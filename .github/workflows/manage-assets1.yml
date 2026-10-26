@@ -1,0 +1,16 @@
+name: Manage Assets1
+
+on:
+  workflow_call:
+
+jobs:
+  manage-assets1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Manage Assets
+        run: node ./scripts/manage-assets1
+
+  pr-execute-index-generator:
+    needs: manage-assets1
+    uses: ./.github/workflows/generate-index.yml
