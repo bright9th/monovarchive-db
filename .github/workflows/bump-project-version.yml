@@ -1,0 +1,89 @@
+name: Bump Project Version
+
+on:
+  workflow_call:
+    inputs:
+      pr_type:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  check-existing-bump:
+    runs-on: ubuntu-latest
+    outputs:
+      already-bumped: ${{ steps.check.outputs.already_bumped }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Check Existing Version Bump Commit
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if gh api "repos/$REPOSITORY/pulls/$PR_NUMBER/commits" \
+            --paginate \
+            --jq '.[].commit.message' |
+            grep -qE '^chore: bump project .* version to '; then
+            echo "already_bumped=true" >> "$GITHUB_OUTPUT"
+            echo "Version bump commit already exists in this PR. Skipping."
+          else
+            echo "already_bumped=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  bump-project-version:
+    needs: check-existing-bump
+    if: needs.check-existing-bump.outputs.already-bumped != 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: manual-approval
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Set Up PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install Dependency
+        run: pnpm install
+
+      - name: Bump Workflow Version
+        id: bump
+        run: node ./scripts/bump-project-version
+        env:
+          PR_TYPE: ${{ inputs.pr_type }}
+
+      - name: Commit & Push Changes
+        env:
+          VERSION_TYPE: ${{ steps.bump.outputs.version_type }}
+          VERSION: ${{ steps.bump.outputs.version }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add .
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: bump project $VERSION_TYPE version to $VERSION"
+          git push origin HEAD:$HEAD_REF
