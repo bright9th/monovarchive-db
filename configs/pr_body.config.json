@@ -16,7 +16,7 @@
         "preId": 1,
         "step": "Valid Type",
         "regex": {
-          "pattern": "^\\[TYPE\\][^\\S\\r\\n]*(?:\\r\\n|[\\n\\v\\f\\r\\u0085\\u2028\\u2029])?[^\\S\\r\\n]*(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b[^\\r\\n]*(?:(?!^\\[[A-Z]+\\]).)*",
+          "pattern": "^\\[TYPE\\] (?:mod-workflow|add-media|mod-metadata|mod-doc)\\b[^\\r\\n]*(?:(?!^\\[[A-Z]+\\]).)*",
           "flags": "ms"
         },
         "error": "The [TYPE] section must contain one of the valid types: mod-workflow, add-media, mod-metadata, or mod-doc."
@@ -26,7 +26,7 @@
         "preId": 1,
         "step": "Non-Empty Description",
         "regex": {
-          "pattern": "^\\[DESCRIPTION\\][^\\S\\r\\n]*(?:\\r\\n|[\\n\\v\\f\\r\\u0085\\u2028\\u2029])?[^\\S\\r\\n]*\\S(?:(?!^\\[[A-Z]+\\]).)*",
+          "pattern": "^\\[DESCRIPTION\\][^\\S\\r\\n]*(?:\\r?\\n)?\\s*\\S(?:(?!^\\[[A-Z]+\\]).)*",
           "flags": "ms"
         },
         "error": "The [DESCRIPTION] section must not be empty. Fill `-` as content if intended empty."
@@ -36,12 +36,12 @@
         "preId": 1,
         "step": "Valid Issue Reference",
         "regex": {
-          "pattern": "^\\[IREF\\][^\\S\\r\\n]*(?:\\r\\n|[\\n\\v\\f\\r\\u0085\\u2028\\u2029])?(?:(?!^\\[[A-Z]+\\]).)*?(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\s+#\\d+(?:(?!^\\[[A-Z]+\\]).)*",
+          "pattern": "^\\[IREF\\] (?:(?!^\\[[A-Z]+\\]).)*?(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\s+#\\d+(?:(?!^\\[[A-Z]+\\]).)*",
           "flags": "ms"
         },
         "error": "The [IREF] section must contain a valid issue reference, such as 'fix #123', 'closes #123', or 'resolved #123', before the next section header."
       }
     ]
   },
-  "getTypeRegex": "(?<=^\\[TYPE\\][^\\S\\r\\n]*(?:\\r\\n|[\\n\\v\\f\\r\\u0085\\u2028\\u2029])?[^\\S\\r\\n]*)(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b"
+  "getTypeRegex": "(?<=^\\[TYPE\\] )(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b"
 }
