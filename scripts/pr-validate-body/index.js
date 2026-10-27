@@ -59,7 +59,7 @@ function validateContent(content) {
       let matches;
 
       try {
-        matches = new RegExp(step.regex).test(content);
+        matches = new RegExp(step.regex.pattern, step.regex.flags).test(content);
       } catch (/** @type {any} */ error) {
         throw new Error(
           `Invalid regex in step ${step.id} (${step.step}): ${error.message}`,
