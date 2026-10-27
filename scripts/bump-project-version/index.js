@@ -9,7 +9,7 @@ const PR_TYPE = process.env.PR_TYPE;
 const workspaceRoot = process.cwd();
 const manifestPath = path.resolve(workspaceRoot, ".", "project.manifest.json");
 
-/** @type {{ projectVersion: { [key: string]: number } }} */
+/** @type {{ projectVersion: { workflow: number, asset: number, doc: number }, schemaVersion: number, previousSchemaVersionCommitHash: string | null, asset0Index: number }} */
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 
 /** @type {{ prType: string, projectVersionType: string }[]} */
@@ -37,6 +37,7 @@ const versionType = validTypeMap.find(
 )?.projectVersionType;
 
 if (PR_TYPE && versionType && versionType in manifest.projectVersion) {
+  // @ts-ignore
   const version = ++manifest.projectVersion[versionType];
 
   fs.writeFileSync(manifestPath, JSON.stringify(manifest));
