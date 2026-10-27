@@ -34,7 +34,7 @@ const PR_TYPE_MAP = [
  * @returns {string | undefined}
  */
 export function getProjectVersionType(prType) {
-  return PR_TYPE_MAP.find((m) => prType in m.prTypes)?.versionType;
+  return PR_TYPE_MAP.find((m) => m.prTypes.includes(prType))?.versionType;
 }
 
 const workspaceRoot = process.cwd();
