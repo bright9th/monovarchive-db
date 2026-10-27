@@ -5,8 +5,8 @@ import {
   getProjectManifest,
   getProjectVersionType,
   writeProjectManifest,
-} from "../shared/projectManifestConfig";
-import { ghOut } from "../shared/githubOutput";
+} from "../shared/projectManifestConfig.js";
+import { ghOut } from "../shared/githubOutput.js";
 
 // pull-request type
 const PR_TYPE = process.env.PR_TYPE;
