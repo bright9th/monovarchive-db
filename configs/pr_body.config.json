@@ -43,5 +43,8 @@
       }
     ]
   },
-  "getTypeRegex": "(?<=^\\[TYPE\\] )(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b"
+  "getTypeRegex": {
+    "pattern": "(?<=^\\[TYPE\\] )(?:mod-workflow|add-media|mod-metadata|mod-doc)\\b",
+    "flags": ""
+  }
 }
