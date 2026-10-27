@@ -40,7 +40,7 @@ if (PR_TYPE && versionType && versionType in manifest.projectVersion) {
   // @ts-ignore
   const version = ++manifest.projectVersion[versionType];
 
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest));
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
   console.log(`Bumped project '${versionType}' version to ${version}.`);
 
