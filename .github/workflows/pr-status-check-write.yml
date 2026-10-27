@@ -1,0 +1,49 @@
+name: PR Status Check Write
+
+on:
+  workflow_call:
+    inputs:
+      job_name:
+        required: true
+        type: string
+      error_messages:
+        required: true
+        type: string
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  update-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Set Up PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install Dependency
+        run: pnpm install
+
+      - name: Write Status Check Comment
+        uses: actions/github-script@v7
+        env:
+          JOB_NAME: ${{ inputs.job_name }}
+          ERROR_MESSAGES: ${{ inputs.error_messages }}
+        with:
+          script: |
+            const { default: run } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write`
+            );
+            await run({ github, context });

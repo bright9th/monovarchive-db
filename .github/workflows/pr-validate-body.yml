@@ -6,8 +6,12 @@ on:
     branches: [workflow, asset, doc]
 
 jobs:
-  pr-validate-body:
+  pr-setup:
     if: github.actor != 'github-actions[bot]'
+    uses: ./.github/workflows/pr-status-check-clearall.yml
+
+  pr-validate-body:
+    needs: pr-setup
     runs-on: ubuntu-latest
     outputs:
       pr_type: ${{ steps.val-body.outputs.pr_type }}
@@ -28,9 +32,28 @@ jobs:
 
       - name: Validate Pull-Request Body
         id: val-body
+        continue-on-error: true
         run: node ./scripts/pr-validate-body
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+
+      - name: Write Status Check Comment
+        if: steps.val-body.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          JOB_NAME: "pr-validate-body"
+          ERROR_MESSAGES: ${{ steps.val-body.outputs.error_messages }}
+        with:
+          script: |
+            const { default: run } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write`
+            );
+            await run({ github, context });
+      - name: Fail Job
+        if: steps.val-body.outcome == 'failure'
+        run: |
+          echo "Failing job. See PR comment for details.""
+          exit 1
 
   pr-execute-diff-validator:
     needs: pr-validate-body

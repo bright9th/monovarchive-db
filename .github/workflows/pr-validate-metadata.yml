@@ -22,7 +22,26 @@ jobs:
         run: pnpm install
 
       - name: Validate Metadata
+        id: val-metadata
         run: node ./scripts/pr-validate-metadata
+
+      - name: Write Status Check Comment
+        if: steps.val-metadata.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          JOB_NAME: "pr-validate-metadata"
+          ERROR_MESSAGES: ${{ steps.val-metadata.outputs.error_messages }}
+        with:
+          script: |
+            const { default: run } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write`
+            );
+            await run({ github, context });
+      - name: Fail Job
+        if: steps.val-metadata.outcome == 'failure'
+        run: |
+          echo "Failing job. See PR comment for details.""
+          exit 1
 
   pr-execute-assets1-manager:
     needs: pr-validate-metadata

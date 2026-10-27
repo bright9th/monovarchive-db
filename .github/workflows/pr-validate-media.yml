@@ -22,7 +22,26 @@ jobs:
         run: pnpm install
 
       - name: Validate Media
+        id: val-media
         run: node ./scripts/pr-validate-media
+
+      - name: Write Status Check Comment
+        if: steps.val-media.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          JOB_NAME: "pr-validate-media"
+          ERROR_MESSAGES: ${{ steps.val-media.outputs.error_messages }}
+        with:
+          script: |
+            const { default: run } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write`
+            );
+            await run({ github, context });
+      - name: Fail Job
+        if: steps.val-media.outcome == 'failure'
+        run: |
+          echo "Failing job. See PR comment for details.""
+          exit 1
 
   pr-execute-assets0-manager:
     needs: pr-validate-media
