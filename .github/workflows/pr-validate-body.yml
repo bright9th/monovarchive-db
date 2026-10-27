@@ -50,7 +50,7 @@ jobs:
   # AUTO VERSIONING
 
   general-version-bump:
-    needs: pr-validate-body
+    needs: [pr-validate-body, pr-execute-diff-validator]
     if: needs.pr-validate-body.outputs.pr_type == 'mod-workflow' || needs.pr-validate-body.outputs.pr_type == 'mod-doc'
     uses: ./.github/workflows/bump-project-version.yml
     with:
