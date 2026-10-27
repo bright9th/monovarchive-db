@@ -20,6 +20,7 @@ if (PR_TYPE && versionType) {
   const version = ++manifest.projectVersion[versionType];
   writeProjectManifest(manifest);
   console.log(`Bumped project '${versionType}' version to ${version}.`);
+  ghOut("version_type", versionType);
   ghOut("version", version);
   exit(0);
 } else {

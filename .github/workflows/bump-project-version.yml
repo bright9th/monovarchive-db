@@ -71,7 +71,7 @@ jobs:
 
       - name: Commit & Push Changes
         env:
-          PR_TYPE: ${{ inputs.pr_type }}
+          VERSION_TYPE: ${{ steps.bump.outputs.version_type }}
           VERSION: ${{ steps.bump.outputs.version }}
           HEAD_REF: ${{ github.head_ref }}
         run: |
@@ -85,5 +85,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: bump project $PR_TYPE version to $VERSION"
+          git commit -m "chore: bump project $VERSION_TYPE version to $VERSION"
           git push origin HEAD:$HEAD_REF
