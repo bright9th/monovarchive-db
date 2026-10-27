@@ -5,7 +5,7 @@
  * @property {number} id
  * @property {number} preId
  * @property {string} step
- * @property {RegexConfig} regex
+ * @property {import("../regex.js").RegexConfig} regex
  * @property {string} error
  */
 
@@ -17,5 +17,5 @@
 /**
  * @typedef {Object} PrBodyConfig
  * @property {StringValidationStepConfig} validation
- * @property {RegexConfig} getTypeRegex
+ * @property {import("../regex.js").RegexConfig} getTypeRegex
  */

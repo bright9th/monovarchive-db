@@ -12,7 +12,7 @@ function getWorkspacePath(pathname) {
 }
 
 /**
- * @typedef {PrCheckConfig | PrBodyConfig | PrDiffConfig | ValImageConfig | ValVideoConfig | ValMetadataConfig} WorkflowConfig
+ * @typedef {import("./prCheckConfig.js").PrCheckConfig | import("./prBodyConfig.js").PrBodyConfig | import("./prDIffConfig.js").PrDiffConfig | import("./valImageConfig.js").ValImageConfig | import("./valVideoConfig.js").ValVideoConfig | import("./valMetadataConfig.js").ValMetadataConfig} WorkflowConfig
  */
 
 export const WorkflowConfigType = Object.freeze({

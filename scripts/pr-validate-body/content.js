@@ -1,6 +1,11 @@
 // @ts-check
 
-/** @type {PrBodyConfig} */
+import {
+  getWorkflowConfig,
+  WorkflowConfigType,
+} from "../shared/workflowConfig/index.js";
+
+/** @type {import("../shared/workflowConfig/prBodyConfig.js").PrBodyConfig} */
 // @ts-ignore
 const config = getWorkflowConfig(WorkflowConfigType.PR_BODY);
 
@@ -54,9 +59,9 @@ export function validateContent(content) {
           content,
         );
       } catch (/** @type {any} */ error) {
-        throw new Error(
-          `Invalid regex in step ${step.id} (${step.step}): ${error.message}`,
-        );
+        throw new Error(`Invalid regex in step ${step.id} (${step.step})`, {
+          cause: error,
+        });
       }
 
       if (!matches) {
