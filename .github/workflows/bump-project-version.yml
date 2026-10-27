@@ -49,4 +49,4 @@ jobs:
           fi
 
           git commit -m "chore: bump project ${{ inputs.pr_type }} version to ${{ steps.bump.outputs.version }}"
-          git push origin HEAD:${{ github.ref_name }}
+          git push origin HEAD:${{ github.head_ref }}
