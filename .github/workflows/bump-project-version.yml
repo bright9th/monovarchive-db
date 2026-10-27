@@ -14,6 +14,8 @@ permissions:
 jobs:
   bump-project-version:
     runs-on: ubuntu-latest
+    environment:
+      name: manual-approval
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
