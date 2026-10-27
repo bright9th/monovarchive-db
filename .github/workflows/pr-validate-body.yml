@@ -7,6 +7,7 @@ on:
 
 jobs:
   pr-validate-body:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     outputs:
       pr_type: ${{ steps.val-body.outputs.pr_type }}
@@ -38,12 +39,12 @@ jobs:
       pr_type: ${{ needs.pr-validate-body.outputs.pr_type }}
 
   pr-media-route:
-    needs: [pr-validate-body, pr-execute-diff-validator]
+    needs: pr-validate-body
     if: needs.pr-validate-body.outputs.pr_type == 'add-media'
     uses: ./.github/workflows/pr-validate-media.yml
 
   pr-metadata-route:
-    needs: [pr-validate-body, pr-execute-diff-validator]
+    needs: pr-validate-body
     if: needs.pr-validate-body.outputs.pr_type == 'mod-metadata'
     uses: ./.github/workflows/pr-validate-metadata.yml
 
