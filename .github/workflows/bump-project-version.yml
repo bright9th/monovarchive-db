@@ -45,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: manual-approval
+      deployment: false
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
