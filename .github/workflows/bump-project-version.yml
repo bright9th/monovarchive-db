@@ -12,10 +12,10 @@ permissions:
   pull-requests: read
 
 jobs:
-  bump-project-version:
+  check-existing-bump:
     runs-on: ubuntu-latest
-    environment:
-      name: manual-approval
+    outputs:
+      already-bumped: ${{ steps.check.outputs.already_bumped }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -39,30 +39,37 @@ jobs:
             echo "already_bumped=false" >> "$GITHUB_OUTPUT"
           fi
 
+  bump-project-version:
+    needs: check-existing-bump
+    if: needs.check-existing-bump.outputs.already-bumped != 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: manual-approval
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - name: Set Up PNPM
-        if: steps.check.outputs.already_bumped != 'true'
         uses: pnpm/action-setup@v4
         with:
           version: 10
       - name: Set Up Node.js
-        if: steps.check.outputs.already_bumped != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
       - name: Install Dependency
-        if: steps.check.outputs.already_bumped != 'true'
         run: pnpm install
 
       - name: Bump Workflow Version
-        if: steps.check.outputs.already_bumped != 'true'
         id: bump
         run: node ./scripts/bump-project-version
         env:
           PR_TYPE: ${{ inputs.pr_type }}
 
       - name: Commit & Push Changes
-        if: steps.check.outputs.already_bumped != 'true'
         env:
           PR_TYPE: ${{ inputs.pr_type }}
           VERSION: ${{ steps.bump.outputs.version }}
