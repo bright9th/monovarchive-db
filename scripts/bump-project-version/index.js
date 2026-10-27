@@ -7,13 +7,10 @@ import { exit } from "node:process";
 const PR_TYPE = process.env.PR_TYPE;
 
 const workspaceRoot = process.cwd();
+const manifestPath = path.resolve(workspaceRoot, ".", "project.manifest.json");
+
 /** @type {{ projectVersion: { [key: string]: number } }} */
-const manifest = JSON.parse(
-  fs.readFileSync(
-    path.resolve(workspaceRoot, ".", "project.manifest.json"),
-    "utf8",
-  ),
-);
+const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 
 /** @type {{ prType: string, projectVersionType: string }[]} */
 const validTypeMap = [
@@ -41,6 +38,9 @@ const versionType = validTypeMap.find(
 
 if (PR_TYPE && versionType && versionType in manifest.projectVersion) {
   const version = ++manifest.projectVersion[versionType];
+
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest));
+
   console.log(`Bumped project '${versionType}' version to ${version}.`);
 
   if (!process.env.GITHUB_OUTPUT)
