@@ -73,7 +73,9 @@ export function validateContent(content) {
 
     // Do not proceed to dependent steps if this group has failures.
     if (failedSteps.length > 0) {
-      const joined = errorMessages.join("\n");
+      const joined = ["**Error in PR description.**", ...errorMessages].join(
+        "\n",
+      );
       throwErrorMessage(joined);
       throw new Error(joined);
     }
