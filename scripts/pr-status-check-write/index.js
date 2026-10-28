@@ -24,7 +24,7 @@ export default async function ({ github, context }) {
     startMarker,
     "[AUTOMATED_STATUS_CHECK_REPORT]\n",
     `[JOB_NAME] ${JOB_NAME}\n`,
-    ERROR_MESSAGES ?? "Undefined Error.",
+    ERROR_MESSAGES || "Undefined Error.",
     endMarker,
   ].join("\n");
 
