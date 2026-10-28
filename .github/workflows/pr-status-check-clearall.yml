@@ -34,6 +34,6 @@ jobs:
         with:
           script: |
             const { default: run } = await import(
-              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-clearall`
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-clearall/index.js`
             );
             await run({ github, context });

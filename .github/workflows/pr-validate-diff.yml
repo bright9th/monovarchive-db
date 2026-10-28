@@ -38,7 +38,7 @@ jobs:
         with:
           script: |
             const { default: run } = await import(
-              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write`
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write/index.js`
             );
             await run({ github, context });
       - name: Fail Job
