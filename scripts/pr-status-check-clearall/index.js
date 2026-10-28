@@ -39,6 +39,14 @@ export default async function ({ github, context }) {
       comment.body?.includes(endMarker),
   );
 
+  if (!previousComments.length) {
+    console.log("No previous status check reports.");
+    return;
+  }
+  console.log(
+    `Found ${previousComments.length} previous status check reports. Clearing all...`,
+  );
+
   for (const comment of previousComments) {
     await github.rest.issues.deleteComment({
       owner,
