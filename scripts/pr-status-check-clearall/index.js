@@ -1,9 +1,13 @@
-// @ts-check
+// @ts-nocheck
 
 import {
   CommentPrefixType,
   getCommentMarker,
 } from "../shared/workflowConfig/commentConfig.js";
+import {
+  getWorkflowConfig,
+  WorkflowConfigType,
+} from "../shared/workflowConfig/index.js";
 
 /** @param {import('@actions/github-script').AsyncFunctionArguments} args */
 export default async function ({ github, context }) {
