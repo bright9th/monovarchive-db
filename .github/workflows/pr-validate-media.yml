@@ -40,7 +40,7 @@ jobs:
       - name: Fail Job
         if: steps.val-media.outcome == 'failure'
         run: |
-          echo "Failing job. See PR comment for details.""
+          echo "Failing job. See PR comment for details."
           exit 1
 
   pr-execute-assets0-manager:

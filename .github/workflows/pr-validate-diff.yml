@@ -44,5 +44,5 @@ jobs:
       - name: Fail Job
         if: steps.val-diff.outcome == 'failure'
         run: |
-          echo "Failing job. See PR comment for details.""
+          echo "Failing job. See PR comment for details."
           exit 1
