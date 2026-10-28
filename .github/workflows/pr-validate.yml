@@ -1,0 +1,35 @@
+name: PR Validation
+
+on:
+  workflow_call:
+    inputs:
+      pr_body:
+        description: Pull-request Body
+        required: true
+        type: string
+    outputs:
+      pr_type:
+        description: Detected Pull-request Type
+        value: ${{ jobs.pr-execute-body-validator.outputs.pr_type }}
+
+jobs:
+  pr-execute-body-validator:
+    uses: ./.github/workflows/pr-validate-body.yml
+    with:
+      pr_body: ${{ inputs.pr_body }}
+
+  pr-execute-diff-validator:
+    needs: pr-execute-body-validator
+    uses: ./.github/workflows/pr-validate-diff.yml
+    with:
+      pr_type: ${{ needs.pr-execute-body-validator.outputs.pr_type }}
+
+  pr-media-route:
+    needs: pr-execute-body-validator
+    if: needs.pr-execute-body-validator.outputs.pr_type == 'add-media'
+    uses: ./.github/workflows/pr-validate-media.yml
+
+  pr-metadata-route:
+    needs: pr-execute-body-validator
+    if: needs.pr-execute-body-validator.outputs.pr_type == 'mod-metadata'
+    uses: ./.github/workflows/pr-validate-metadata.yml

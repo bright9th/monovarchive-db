@@ -8,49 +8,16 @@ on:
 jobs:
   pr-setup:
     if: github.actor != 'github-actions[bot]'
-    uses: ./.github/workflows/pr-status-check-clearall.yml
+    uses: ./.github/workflows/pr-setup.yml
 
-  pr-execute-body-validator:
+  pr-validation:
     needs: pr-setup
-    uses: ./.github/workflows/pr-validate-body.yml
+    uses: ./.github/workflows/pr-validate.yml
     with:
       pr_body: ${{ github.event.pull_request.body }}
 
-  pr-execute-diff-validator:
-    needs: pr-execute-body-validator
-    uses: ./.github/workflows/pr-validate-diff.yml
+  version-bump:
+    needs: pr-validation
+    uses: ./.github/workflows/pr-version-bump.yml
     with:
-      pr_type: ${{ needs.pr-execute-body-validator.outputs.pr_type }}
-
-  pr-media-route:
-    needs: pr-execute-body-validator
-    if: needs.pr-execute-body-validator.outputs.pr_type == 'add-media'
-    uses: ./.github/workflows/pr-validate-media.yml
-
-  pr-metadata-route:
-    needs: pr-execute-body-validator
-    if: needs.pr-execute-body-validator.outputs.pr_type == 'mod-metadata'
-    uses: ./.github/workflows/pr-validate-metadata.yml
-
-  # AUTO VERSIONING
-
-  general-version-bump:
-    needs: [pr-execute-body-validator, pr-execute-diff-validator]
-    if: needs.pr-execute-body-validator.outputs.pr_type == 'mod-workflow' || needs.pr-execute-body-validator.outputs.pr_type == 'mod-doc'
-    uses: ./.github/workflows/bump-project-version.yml
-    with:
-      pr_type: ${{ needs.pr-execute-body-validator.outputs.pr_type }}
-
-  asset-media-version-bump:
-    needs: [pr-execute-body-validator, pr-media-route]
-    if: needs.pr-execute-body-validator.outputs.pr_type == 'add-media'
-    uses: ./.github/workflows/bump-project-version.yml
-    with:
-      pr_type: ${{ needs.pr-execute-body-validator.outputs.pr_type }}
-
-  asset-metadata-version-bump:
-    needs: [pr-execute-body-validator, pr-metadata-route]
-    if: needs.pr-execute-body-validator.outputs.pr_type == 'mod-metadata'
-    uses: ./.github/workflows/bump-project-version.yml
-    with:
-      pr_type: ${{ needs.pr-execute-body-validator.outputs.pr_type }}
+      pr_type: ${{ needs.pr-validation.outputs.pr_type }}
