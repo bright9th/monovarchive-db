@@ -22,8 +22,9 @@ export default async function ({ github, context }) {
 
   const body = [
     startMarker,
-    "[AUTOMATED_STATUS_CHECK_REPORT]\n",
-    `[JOB_NAME] ${JOB_NAME}\n`,
+    "[AUTOMATED_STATUS_CHECK_REPORT]",
+    `[JOB_NAME] \`${JOB_NAME}\``,
+    "\n---\n",
     ERROR_MESSAGES || "Undefined Error.",
     endMarker,
   ].join("\n");
