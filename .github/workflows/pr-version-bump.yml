@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       pr_type:
-        description: Detected Pull-request Type
+        description: Detected pull-request type
         required: true
         type: string
 
