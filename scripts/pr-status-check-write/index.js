@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-check
 
 import { EscapeMode, newLineEscape } from "../shared/stringHandler.js";
 import {

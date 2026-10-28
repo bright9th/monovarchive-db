@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "install-remote": "pnpm uninstall -D @actions/github-script && pnpm install",
     "check": "tsc",
     "lint": "eslint ."
   },
@@ -9,6 +10,7 @@
     "sharp": "^0.35.5"
   },
   "devDependencies": {
+    "@actions/github-script": "github:actions/github-script",
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.9.9",
     "eslint": "^10.13.0",

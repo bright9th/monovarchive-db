@@ -19,7 +19,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - name: Install Dependency
-        run: pnpm install
+        run: pnpm run install-remote
 
       - name: Manage Assets
         run: node ./scripts/manage-assets1
