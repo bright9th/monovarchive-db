@@ -26,7 +26,7 @@
         "preId": 1,
         "step": "Non-Empty Description",
         "regex": {
-          "pattern": "^\\[DESCRIPTION\\][^\\S\\r\\n]*(?:\\r?\\n)?\\s*\\S(?:(?!^\\[[A-Z]+\\]).)*",
+          "pattern": "^\\[DESCRIPTION\\][^\\S\\r\\n]*\\s*(?!^\\[[A-Z]+\\])\\S(?:(?!^\\[[A-Z]+\\]).)*?(?=\\s*(?:^\\[[A-Z]+\\]|$(?![\\s\\S])))",
           "flags": "ms"
         },
         "error": "The [DESCRIPTION] section must not be empty. Fill `-` as content if intended empty."

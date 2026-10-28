@@ -12,7 +12,7 @@ function getWorkspacePath(pathname) {
 }
 
 /**
- * @typedef {import("./prCheckConfig.js").PrCheckConfig | import("./prBodyConfig.js").PrBodyConfig | import("./prDIffConfig.js").PrDiffConfig | import("./valImageConfig.js").ValImageConfig | import("./valVideoConfig.js").ValVideoConfig | import("./valMetadataConfig.js").ValMetadataConfig} WorkflowConfig
+ * @typedef {import("./prCheckConfig.js").PrCheckConfig | import("./prBodyConfig.js").PrBodyConfig | import("./prDIffConfig.js").PrDiffConfig | import("./valImageConfig.js").ValImageConfig | import("./valVideoConfig.js").ValVideoConfig | import("./valMetadataConfig.js").ValMetadataConfig | import("./actionsConfig.js").ActionsConfig | import("./commentConfig.js").CommentConfig} WorkflowConfig
  */
 
 export const WorkflowConfigType = Object.freeze({
@@ -22,6 +22,8 @@ export const WorkflowConfigType = Object.freeze({
   VAL_IMAGE: 3,
   VAL_VIDEO: 4,
   VAL_METADATA: 5,
+  ACTIONS: 6,
+  COMMENT: 7,
 });
 /** @type {{ [key: number]: string }} */
 const configPaths = {
@@ -31,6 +33,8 @@ const configPaths = {
   3: "configs/image.validation.config.json",
   4: "configs/video.validation.config.json",
   5: "configs/metadata.validation.config.json",
+  6: "configs/actions.config.json",
+  7: "configs/comment.config.json",
 };
 
 /**

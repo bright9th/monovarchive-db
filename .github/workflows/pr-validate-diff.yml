@@ -26,4 +26,23 @@ jobs:
         run: pnpm install
 
       - name: Validate Pull-Request Diff
+        id: val-diff
         run: node ./scripts/pr-validate-diff
+
+      - name: Write Status Check Comment
+        if: steps.val-diff.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          JOB_NAME: "pr-validate-diff"
+          ERROR_MESSAGES: ${{ steps.val-diff.outputs.error_messages }}
+        with:
+          script: |
+            const { default: run } = await import(
+              `${process.env.GITHUB_WORKSPACE}/scripts/pr-status-check-write/index.js`
+            );
+            await run({ github, context });
+      - name: Fail Job
+        if: steps.val-diff.outcome == 'failure'
+        run: |
+          echo "Failing job. See PR comment for details."
+          exit 1

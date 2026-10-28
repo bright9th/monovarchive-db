@@ -1,0 +1,7 @@
+{
+  "startMarker": "<!-- %s:start -->",
+  "endMarker": "<!-- %s:end -->",
+  "prefixes": {
+    "statusCheck": "status-check"
+  }
+}
