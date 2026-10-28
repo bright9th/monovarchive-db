@@ -7,6 +7,10 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   pr-validate-diff:
     runs-on: ubuntu-latest
@@ -23,7 +27,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - name: Install Dependency
-        run: pnpm install
+        run: pnpm run install-remote
 
       - name: Validate Pull-Request Diff
         id: val-diff

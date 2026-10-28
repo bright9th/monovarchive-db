@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "install-remote": "pnpm uninstall -D @actions/github-script && pnpm install",
     "check": "tsc",
     "lint": "eslint ."
   },

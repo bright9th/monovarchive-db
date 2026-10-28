@@ -27,7 +27,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - name: Install Dependency
-        run: pnpm install
+        run: pnpm run install-remote
 
       - name: Clear Status Check Comments
         uses: actions/github-script@v7
