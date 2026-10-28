@@ -15,7 +15,7 @@ permissions:
   issues: write
 
 jobs:
-  update-comment:
+  pr-status-check-write:
     runs-on: ubuntu-latest
 
     steps:

@@ -8,7 +8,7 @@ permissions:
   issues: write
 
 jobs:
-  update-comment:
+  pr-status-check-clearall:
     runs-on: ubuntu-latest
 
     steps:
