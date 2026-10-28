@@ -1,17 +1,19 @@
 name: PR Validate Body
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, edited]
-    branches: [workflow, asset, doc]
+  workflow_call:
+    inputs:
+      pr_body:
+        description: Pull-request body
+        required: true
+        type: string
+    outputs:
+      pr_type:
+        description: Detected pull-request type
+        value: ${{ jobs.pr-validate-body.outputs.pr_type }}
 
 jobs:
-  pr-setup:
-    if: github.actor != 'github-actions[bot]'
-    uses: ./.github/workflows/pr-status-check-clearall.yml
-
   pr-validate-body:
-    needs: pr-setup
     runs-on: ubuntu-latest
     outputs:
       pr_type: ${{ steps.val-body.outputs.pr_type }}
@@ -35,7 +37,7 @@ jobs:
         continue-on-error: true
         run: node ./scripts/pr-validate-body
         env:
-          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_BODY: ${{ inputs.pr_body }}
 
       - name: Write Status Check Comment
         if: steps.val-body.outcome == 'failure'
@@ -54,42 +56,3 @@ jobs:
         run: |
           echo "Failing job. See PR comment for details."
           exit 1
-
-  pr-execute-diff-validator:
-    needs: pr-validate-body
-    uses: ./.github/workflows/pr-validate-diff.yml
-    with:
-      pr_type: ${{ needs.pr-validate-body.outputs.pr_type }}
-
-  pr-media-route:
-    needs: pr-validate-body
-    if: needs.pr-validate-body.outputs.pr_type == 'add-media'
-    uses: ./.github/workflows/pr-validate-media.yml
-
-  pr-metadata-route:
-    needs: pr-validate-body
-    if: needs.pr-validate-body.outputs.pr_type == 'mod-metadata'
-    uses: ./.github/workflows/pr-validate-metadata.yml
-
-  # AUTO VERSIONING
-
-  general-version-bump:
-    needs: [pr-validate-body, pr-execute-diff-validator]
-    if: needs.pr-validate-body.outputs.pr_type == 'mod-workflow' || needs.pr-validate-body.outputs.pr_type == 'mod-doc'
-    uses: ./.github/workflows/bump-project-version.yml
-    with:
-      pr_type: ${{ needs.pr-validate-body.outputs.pr_type }}
-
-  asset-media-version-bump:
-    needs: [pr-validate-body, pr-media-route]
-    if: needs.pr-validate-body.outputs.pr_type == 'add-media'
-    uses: ./.github/workflows/bump-project-version.yml
-    with:
-      pr_type: ${{ needs.pr-validate-body.outputs.pr_type }}
-
-  asset-metadata-version-bump:
-    needs: [pr-validate-body, pr-metadata-route]
-    if: needs.pr-validate-body.outputs.pr_type == 'mod-metadata'
-    uses: ./.github/workflows/bump-project-version.yml
-    with:
-      pr_type: ${{ needs.pr-validate-body.outputs.pr_type }}

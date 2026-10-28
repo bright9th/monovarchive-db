@@ -1,0 +1,28 @@
+name: PR Version Bump
+
+on:
+  workflow_call:
+    inputs:
+      pr_type:
+        description: Detected pull-request type
+        required: true
+        type: string
+
+jobs:
+  general-version-bump:
+    if: inputs.pr_type == 'mod-workflow' || inputs.pr_type == 'mod-doc'
+    uses: ./.github/workflows/bump-project-version.yml
+    with:
+      pr_type: ${{ inputs.pr_type }}
+
+  asset-media-version-bump:
+    if: inputs.pr_type == 'add-media'
+    uses: ./.github/workflows/bump-project-version.yml
+    with:
+      pr_type: ${{ inputs.pr_type }}
+
+  asset-metadata-version-bump:
+    if: inputs.pr_type == 'mod-metadata'
+    uses: ./.github/workflows/bump-project-version.yml
+    with:
+      pr_type: ${{ inputs.pr_type }}

@@ -1,0 +1,23 @@
+name: PR Validate Body
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches: [workflow, asset, doc]
+
+jobs:
+  pr-setup:
+    if: github.actor != 'github-actions[bot]'
+    uses: ./.github/workflows/pr-setup.yml
+
+  pr-validation:
+    needs: pr-setup
+    uses: ./.github/workflows/pr-validate.yml
+    with:
+      pr_body: ${{ github.event.pull_request.body }}
+
+  version-bump:
+    needs: pr-validation
+    uses: ./.github/workflows/pr-version-bump.yml
+    with:
+      pr_type: ${{ needs.pr-validation.outputs.pr_type }}
