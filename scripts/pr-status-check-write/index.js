@@ -1,5 +1,6 @@
 // @ts-nocheck
 
+import { EscapeMode, newLineEscape } from "../shared/stringHandler.js";
 import {
   CommentPrefixType,
   getCommentMarker,
@@ -18,14 +19,16 @@ export default async function ({ github, context }) {
 
   const JOB_NAME = process.env.JOB_NAME;
   if (!JOB_NAME) throw new Error("JOB_NAME is not defined.");
-  const ERROR_MESSAGES = process.env.ERROR_MESSAGES;
+  const ERROR_MESSAGES = process.env.ERROR_MESSAGES || null;
 
   const body = [
     startMarker,
     "[AUTOMATED_STATUS_CHECK_REPORT]",
     `[JOB_NAME] \`${JOB_NAME}\``,
     "\n---\n",
-    ERROR_MESSAGES || "Undefined Error.",
+    ERROR_MESSAGES
+      ? newLineEscape(ERROR_MESSAGES, EscapeMode.DECODE)
+      : "Undefined Error.",
     endMarker,
   ].join("\n");
 
