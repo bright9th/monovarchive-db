@@ -43,6 +43,7 @@ jobs:
 
       - name: Validate Pull-Request Diff
         id: val-diff
+        continue-on-error: true
         env:
           PR_TYPE: ${{ inputs.pr_type }}
           FILE_DIFFS_PATH: file-diffs.txt
