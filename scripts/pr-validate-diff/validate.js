@@ -36,10 +36,11 @@ export default function (prType, files) {
 
   if (invalidFiles.length > 0) {
     const joined = [
-      `[ERROR] Files modified are outside scoped boundary by [TYPE] ${prType}.\n`,
+      `[ERROR] Files modified are outside scoped boundary by [TYPE] ${prType}.\n\`\`\``,
       ...invalidFiles,
-      "\nValid directory and file paths where files can be modified in this scope are:\n",
+      "\`\`\`\nValid directory and file paths where files can be modified in this scope are:\n\`\`\`",
       ...validPaths,
+      "\`\`\`"
     ].join("\n");
     throwErrorMessage(joined);
     throw new Error(joined);
