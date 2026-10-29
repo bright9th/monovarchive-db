@@ -12,6 +12,10 @@ on:
         description: Detected pull-request type
         value: ${{ jobs.pr-validate-body.outputs.pr_type }}
 
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   pr-validate-body:
     runs-on: ubuntu-latest
