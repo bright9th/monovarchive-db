@@ -1,0 +1,23 @@
+{
+  "validation": {
+    "directories": {
+      "mod-workflow": [
+        ".github/workflows/*",
+        ".github/CODEOWNERS",
+        "scripts/*",
+        "configs/*",
+        "schemas/*"
+      ],
+      "add-media": [
+        "assets/0/*"
+      ],
+      "mod-metadata": [
+        "assets/1/*"
+      ],
+      "mod-doc": [
+        "README.md",
+        "docs/*"
+      ]
+    }
+  }
+}

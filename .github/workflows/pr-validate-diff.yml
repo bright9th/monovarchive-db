@@ -29,8 +29,19 @@ jobs:
       - name: Install Dependency
         run: pnpm run install-remote
 
+      - name: Get file diffs
+        id: changes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > file-diffs.txt
+
       - name: Validate Pull-Request Diff
         id: val-diff
+        env:
+          PR_TYPE: ${{ inputs.pr_type }}
+          FILE_DIFFS_PATH: file-diffs.txt
         run: node ./scripts/pr-validate-diff
 
       - name: Write Status Check Comment
